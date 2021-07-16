@@ -5,6 +5,16 @@
     <link>http://blog.jmardoyaz.com/authors/</link>
     <description>Recent content in Authors on jmardoyaz</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language><atom:link href="http://blog.jmardoyaz.com/authors/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Thu, 15 Jul 2021 22:01:18 -0400</lastBuildDate><atom:link href="http://blog.jmardoyaz.com/authors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>jmardoyaz</title>
+      <link>http://blog.jmardoyaz.com/authors/jmardoyaz/</link>
+      <pubDate>Thu, 15 Jul 2021 22:01:18 -0400</pubDate>
+      
+      <guid>http://blog.jmardoyaz.com/authors/jmardoyaz/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

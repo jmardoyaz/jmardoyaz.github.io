@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>jmardoyaz</title>
-    <link>http://blog.jmardoyaz.com/</link>
-    <description>Recent content on jmardoyaz</description>
+    <title>Posts on jmardoyaz</title>
+    <link>http://blog.jmardoyaz.com/posts/</link>
+    <description>Recent content in Posts on jmardoyaz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 15 Jul 2021 22:01:18 -0400</lastBuildDate><atom:link href="http://blog.jmardoyaz.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Jul 2021 22:01:18 -0400</lastBuildDate><atom:link href="http://blog.jmardoyaz.com/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Kubernetes Testing Environment con Vagrant y Ansible</title>
       <link>http://blog.jmardoyaz.com/posts/kubernetes-vagrant-ansible-testing-environment/</link>

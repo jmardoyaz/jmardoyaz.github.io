@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
+
+    <meta name="author" content="jmardoyaz">
+    <meta name="description" content="Existen diversos proyectos que nos permiten tener un entorno de pruebas amigables para la ejecución de Kubernetes. Minikube [https://kubernetes.io/docs/setup/minikube] &amp; Microk8s [https://microk8s.io/] deben ser los más populares y los más sencillos de implementar. En mi caso, necesito tener un entorno de pruebas del proceso de instalación y configuración inicial, así que he decidido montar una infraestructura con máquinas virtuales administradas con Vagrant y aprovisionadas con Ansible.
+Proyecto en Github    El proyecto se encuentra disponible en Github.">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kubernetes Testing Environment con Vagrant y Ansible"/>
+<meta name="twitter:description" content="Existen diversos proyectos que nos permiten tener un entorno de pruebas amigables para la ejecución de Kubernetes. Minikube [https://kubernetes.io/docs/setup/minikube] &amp; Microk8s [https://microk8s.io/] deben ser los más populares y los más sencillos de implementar. En mi caso, necesito tener un entorno de pruebas del proceso de instalación y configuración inicial, así que he decidido montar una infraestructura con máquinas virtuales administradas con Vagrant y aprovisionadas con Ansible.
+Proyecto en Github    El proyecto se encuentra disponible en Github."/>
+
+    <meta property="og:title" content="Kubernetes Testing Environment con Vagrant y Ansible" />
+<meta property="og:description" content="Existen diversos proyectos que nos permiten tener un entorno de pruebas amigables para la ejecución de Kubernetes. Minikube [https://kubernetes.io/docs/setup/minikube] &amp; Microk8s [https://microk8s.io/] deben ser los más populares y los más sencillos de implementar. En mi caso, necesito tener un entorno de pruebas del proceso de instalación y configuración inicial, así que he decidido montar una infraestructura con máquinas virtuales administradas con Vagrant y aprovisionadas con Ansible.
+Proyecto en Github    El proyecto se encuentra disponible en Github." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.jmardoyaz.com/posts/kubernetes-vagrant-ansible-testing-environment/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-07-15T22:01:18-04:00" />
+<meta property="article:modified_time" content="2021-07-15T22:01:18-04:00" />
+
+
+
+    <title>
+  Kubernetes Testing Environment con Vagrant y Ansible · jmardoyaz
+</title>
+
+    
+      <link rel="canonical" href="http://blog.jmardoyaz.com/posts/kubernetes-vagrant-ansible-testing-environment/">
+    
+
+    <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.34dfa7b2f5cdeb0f5302b2628f4a7a4bfe88a2431e1397ee4ec605c56ab69701.css" integrity="sha256-NN&#43;nsvXN6w9TArJij0p6S/6IokMeE5fuTsYFxWq2lwE=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="/css/coder-dark.min.d8f89ef09509afb63b9b2595ee174e53cc51ce02a6f6a2179e1621f9389e4340.css" integrity="sha256-2Pie8JUJr7Y7myWV7hdOU8xRzgKm9qIXnhYh&#43;TieQ0A=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/img/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+    
+      <script defer src="https://twemoji.maxcdn.com/v/13.0.2/twemoji.min.js"
+        integrity="sha384-wyB/MspSJ/r2bT2kCj44qtsYRYlpzO2oAPhRj5myrWD63dt6qWv4x8AZe7Fl3K3b" crossorigin="anonymous"></script>
+    
+
+    <meta name="generator" content="Hugo 0.85.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto"
+        onload=" twemoji.parse(document.body); "
+  >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      jmardoyaz
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="http://blog.jmardoyaz.com/posts/kubernetes-vagrant-ansible-testing-environment/">
+              Kubernetes Testing Environment con Vagrant y Ansible
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime='2021-07-15T22:01:18-04:00'>
+                July 15, 2021
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              4-minute read
+            </span>
+          </div>
+          <div class="authors">
+    <i class="fa fa-user" aria-hidden="true"></i>
+      <a href="/authors/jmardoyaz/">jmardoyaz</a></div>
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <p>Existen diversos proyectos que nos permiten tener un entorno de pruebas  amigables para la ejecución de Kubernetes. Minikube [https://kubernetes.io/docs/setup/minikube]  &amp; Microk8s [https://microk8s.io/] deben ser los más populares y los más sencillos de implementar. En mi caso,  necesito tener un entorno de pruebas del proceso de instalación y configuración  inicial, así que he decidido montar una infraestructura con máquinas virtuales  administradas con Vagrant  y aprovisionadas con Ansible.</p>
+<h2 id="proyecto-en-github">
+  Proyecto en Github
+  <a class="heading-link" href="#proyecto-en-github">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>El proyecto se encuentra disponible en Github. Sólo es necesario clonar el
+repositorio y comenzar a utilizar.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git clone https://github.com/jmardoyaz/K8sSingleMaster
+</code></pre></div><h2 id="máquinas-virtuales-con-vagrant">
+  Máquinas Virtuales con Vagrant
+  <a class="heading-link" href="#m%c3%a1quinas-virtuales-con-vagrant">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>En mi caso, montaré un cluster de Kubernetes en modo Single Master [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/], por  ende, sólo necesitaré de 1 máquina virtual. Dejaré disponible la configuración  para 3 máquinas virtuales. Todas las máquinas virtuales corren CentOS7 como SO.</p>
+<ul>
+<li>Configuración con 1 nodo maestro y 2 nodos esclavos:</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Vagrant.configure(<span style="font-style:italic">&#34;2&#34;</span>) <span style="font-weight:bold">do</span> |config|
+    config.vm.define <span style="font-style:italic">&#34;k8s-master&#34;</span> <span style="font-weight:bold">do</span> |app|
+        app.vm.box = <span style="font-style:italic">&#34;bento/centos-7&#34;</span>
+        app.vm.hostname = <span style="font-style:italic">&#34;k8s-master&#34;</span>
+        app.vm.network <span style="font-style:italic">&#34;private_network&#34;</span>, ip: <span style="font-style:italic">&#34;172.0.1.2&#34;</span>, netmask: <span style="font-style:italic">&#34;255.255.255.0&#34;</span>, nic_type: <span style="font-style:italic">&#34;virtio&#34;</span>, dhcp_enabled: false
+        app.vm.network :forwarded_port, guest: 22, host: 10122, id: <span style="font-style:italic">&#34;ssh&#34;</span>
+        app.ssh.username = <span style="font-style:italic">&#39;root&#39;</span>
+        app.ssh.password = <span style="font-style:italic">&#39;vagrant&#39;</span>
+        app.ssh.insert_key = <span style="font-style:italic">&#39;true&#39;</span>
+    end
+    
+    config.vm.define <span style="font-style:italic">&#34;k8s-node01&#34;</span> <span style="font-weight:bold">do</span> |app|
+        app.vm.box = <span style="font-style:italic">&#34;bento/centos-7&#34;</span>
+        app.vm.hostname = <span style="font-style:italic">&#34;k8s-node01&#34;</span>
+        app.vm.network <span style="font-style:italic">&#34;private_network&#34;</span>, ip: <span style="font-style:italic">&#34;172.0.1.3&#34;</span>, netmask: <span style="font-style:italic">&#34;255.255.255.0&#34;</span>, nic_type: <span style="font-style:italic">&#34;virtio&#34;</span>, dhcp_enabled: false
+        app.vm.network :forwarded_port, guest: 22, host: 11122, id: <span style="font-style:italic">&#34;ssh&#34;</span>
+        app.ssh.username = <span style="font-style:italic">&#39;root&#39;</span>
+        app.ssh.password = <span style="font-style:italic">&#39;vagrant&#39;</span>
+        app.ssh.insert_key = <span style="font-style:italic">&#39;true&#39;</span>
+    end
+    
+    config.vm.define <span style="font-style:italic">&#34;k8s-node02&#34;</span> <span style="font-weight:bold">do</span> |app|
+        app.vm.box = <span style="font-style:italic">&#34;bento/centos-7&#34;</span>
+        app.vm.hostname = <span style="font-style:italic">&#34;k8s-node02&#34;</span>
+        app.vm.network <span style="font-style:italic">&#34;private_network&#34;</span>, ip: <span style="font-style:italic">&#34;172.0.1.4&#34;</span>, netmask: <span style="font-style:italic">&#34;255.255.255.0&#34;</span>, nic_type: <span style="font-style:italic">&#34;virtio&#34;</span>, dhcp_enabled: false
+        app.vm.network :forwarded_port, guest: 22, host: 12122, id: <span style="font-style:italic">&#34;ssh&#34;</span>
+        app.ssh.username = <span style="font-style:italic">&#39;root&#39;</span>
+        app.ssh.password = <span style="font-style:italic">&#39;vagrant&#39;</span>
+        app.ssh.insert_key = <span style="font-style:italic">&#39;true&#39;</span>
+    end
+end
+</code></pre></div><p>Existen algunos parámetros que es necesario tener en cuenta:</p>
+<ul>
+<li>Configuración Interfaz de Red: En un cluster de K8s es necesario que todas las máquinas tengan visibilidad entre sí (Obvio). La configuración inicial de Vagrant deja disponible solo la conectividad entre la máquina host y la máquina virtual. Para cambiar este comportamiento creamos una interfaz del  tipo virtio y asignamos configuraciones de red de manera estática.</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">app.vm.network <span style="font-style:italic">&#34;private_network&#34;</span>, ip: <span style="font-style:italic">&#34;172.0.1.3&#34;</span>, netmask: <span style="font-style:italic">&#34;255.255.255.0&#34;</span>, nic_type: <span style="font-style:italic">&#34;virtio&#34;</span>, dhcp_enabled: false
+app.vm.network :forwarded_port, guest: 22, host: 11122, id: <span style="font-style:italic">&#34;ssh&#34;</span>
+</code></pre></div><h2 id="iniciar-infraestructura">
+  Iniciar Infraestructura
+  <a class="heading-link" href="#iniciar-infraestructura">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>Para arrancar la infraestructura es necesario tener instalado Vagrant + VirtualBox en tú equipo. Una vez instaladas estás 2 herramientas, arrancamos  vagrant desde la raíz del proyecto.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git clone https://github.com/jmardoyaz/K8sSingleMaster
+$ cd K8sSingleMaster
+$ vagrant up k8s-master
+</code></pre></div><p>Si por algún motivo el proceso de instalación falla, simplemente destruye la  máquina virtual y vuelve a iniciar.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ vagrant destroy
+</code></pre></div><h2 id="aprovisionamiento-con-ansible">
+  Aprovisionamiento con Ansible
+  <a class="heading-link" href="#aprovisionamiento-con-ansible">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>Con la infraestructura corriendo, solo falta ejecutar los playbooks de Ansible  que automatizan el proceso de instalación de un cluster Single Master.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd K8sSingleMaster
+$ ansible-playbook -i k8s-inventory k8s.yml --limit <span style="font-style:italic">&#39;k8s-master&#39;</span>
+</code></pre></div><p>A través de este comando indicamos que ejecutaremos el proceso de instalación en el nodo k8s-master.</p>
+<h2 id="troubleshooting-instalación">
+  Troubleshooting Instalación
+  <a class="heading-link" href="#troubleshooting-instalaci%c3%b3n">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>Para verificar la instalación, es necesario acceder a la máquina virtual y verificar los contenedores y pods de Kubernetes</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ vagrant ssh k8s-master
+$ docker ps <span style="font-style:italic"># Verificar contenedores</span>
+$ kubectl get pods --all-namespaces
+</code></pre></div><h2 id="dashboard">
+  Dashboard
+  <a class="heading-link" href="#dashboard">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>Una de las tareas pendientes es poder automatizar el proceso de instalación del dashboard y la creación de las credenciales de acceso. Dejo el procedimiento &lsquo;manual&rsquo; del proceso de instalación.</p>
+<ul>
+<li>Instalación Dashboard</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+</code></pre></div><h1 id="verificar-instalacion">
+  Verificar instalacion
+  <a class="heading-link" href="#verificar-instalacion">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h1>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl -n kube-system get service kubernetes-dashboard
+</code></pre></div><ul>
+<li>Modificación Acceso al Dashboard: ClusterIP por NodePort</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl -n kube-system edit service kubernetes-dashboard
+</code></pre></div><ul>
+<li>Modificar nodePort por 31500</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl -n kube-system edit service kubernetes-dashboard
+$ kubectl -n kube-system get service kubernetes-dashboard
+</code></pre></div><ul>
+<li>Configuración Firewall</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ firewall-cmd --permanent --add-port=31500/tcp
+$ firewall-cmd --reload
+</code></pre></div><ul>
+<li>Credenciales Dashboard</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl -n kube-system get service kubernetes-dashboard
+$ kubectl create serviceaccount cluster-admin-dashboard-sa
+$ kubectl create clusterrolebinding cluster-admin-dashboard-sa <span style="font-weight:bold;font-style:italic">\
+</span><span style="font-weight:bold;font-style:italic"></span>--clusterrole=cluster-admin <span style="font-weight:bold;font-style:italic">\
+</span><span style="font-weight:bold;font-style:italic"></span>--serviceaccount=default:cluster-admin-dashboard-sa
+</code></pre></div><ul>
+<li>Command:</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl get secret | grep cluster-admin-dashboard-sa
+</code></pre></div><ul>
+<li>Result</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cluster-admin-dashboard-sa-token-kfcdz   kubernetes.io/service-account-token   3      26s
+</code></pre></div><ul>
+<li>Command:</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl describe secret cluster-admin-dashboard-sa-token-kfcdz
+</code></pre></div><ul>
+<li>Result:</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Name:         cluster-admin-dashboard-sa-token-kfcdz
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  kubernetes.io/service-account.name: cluster-admin-dashboard-sa
+kubernetes.io/service-account.uid: abba4b8e-0a16-11e9-bf5c-005056b74f91
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1025 bytes
+namespace:  7 bytes
+token:      eyJhbGciOiJSUzI1NiI[..]
+</code></pre></div><ul>
+<li>Acceso a Dashboard</li>
+</ul>
+<p>https://172.0.1.2:31500/#!/login</p>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jmardoyaz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Valdivia - Chile</p>
+      
+      
+        ©
+        
+          2019 -
+        
+        2021
+         jmardoyaz 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+
+    </main>
+
+    
+      
+      <script src="/js/coder.min.03b17769f4f91ae35667e1f2a1ca8c16f50562576cf90ff32b3179926914daa5.js" integrity="sha256-A7F3afT5GuNWZ&#43;HyocqMFvUFYlds&#43;Q/zKzF5kmkU2qU="></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

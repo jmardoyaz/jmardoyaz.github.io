@@ -3,10 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://blog.jmardoyaz.com/authors/</loc>
+    <lastmod>2021-07-15T22:01:18-04:00</lastmod>
   </url><url>
-    <loc>http://blog.jmardoyaz.com/categories/</loc>
+    <loc>http://blog.jmardoyaz.com/authors/jmardoyaz/</loc>
+    <lastmod>2021-07-15T22:01:18-04:00</lastmod>
   </url><url>
     <loc>http://blog.jmardoyaz.com/</loc>
+    <lastmod>2021-07-15T22:01:18-04:00</lastmod>
+  </url><url>
+    <loc>http://blog.jmardoyaz.com/posts/kubernetes-vagrant-ansible-testing-environment/</loc>
+    <lastmod>2021-07-15T22:01:18-04:00</lastmod>
+  </url><url>
+    <loc>http://blog.jmardoyaz.com/posts/</loc>
+    <lastmod>2021-07-15T22:01:18-04:00</lastmod>
+  </url><url>
+    <loc>http://blog.jmardoyaz.com/categories/</loc>
   </url><url>
     <loc>http://blog.jmardoyaz.com/series/</loc>
   </url><url>
